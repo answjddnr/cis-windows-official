@@ -266,7 +266,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.2_L1_Configure_Access_this_com
   security_principals = (((users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries) - (users.where { username.casecmp('Administrators') == 0}.uids.entries + groups.where { name.casecmp('Administrators') == 0}.gids.entries)) & ((users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries) - ['S-1-5-11'])).uniq
   security_principals.each do |entry|
     describe security_policy do
-      skip its("SeNetworkLogonRight") { should_not include entry }
+      # skip its("SeNetworkLogonRight") { should_not include entry }
     end
   end
 end
@@ -283,7 +283,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.3_L1_Ensure_Act_as_part_of_the
   impact 1.0
   (users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries).each do |entry|
     describe security_policy do
-      skip its("SeTcbPrivilege") { should_not include entry }
+     # skip its("SeTcbPrivilege") { should_not include entry }
     end
   end
 end
@@ -1891,8 +1891,8 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.3.11.3_L1_Ensure_Network_Securit
   "
   impact 1.0
   describe registry_key("HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa\\pku2u") do
-    skip it { should have_property "AllowOnlineID" }
-    skip its("AllowOnlineID") { should cmp == 0 }
+    # skip it { should have_property "AllowOnlineID" }
+    # skip its("AllowOnlineID") { should cmp == 0 }
   end
 end
 

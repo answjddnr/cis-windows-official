@@ -4442,7 +4442,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_18.9.41.4_L1_Ensure_Configure_Pass
   impact 1.0
   describe registry_key("HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\MicrosoftEdge\\Main") do
     it { should have_property "FormSuggest Passwords" }
-    its("FormSuggest Passwords") { should cmp "no" }
+    its("FormSuggest Passwords") { should cmp "1" }
   end
 end
 

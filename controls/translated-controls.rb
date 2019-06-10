@@ -564,27 +564,27 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.16_L1_Ensure_Debug_programs_is
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_2.2.17_L1_Configure_Deny_access_to_this_computer_from_the_network" do
-  title "(L1) Configure 'Deny access to this computer from the network'"
-  desc  "
-    This policy setting prohibits users from connecting to a computer from across the network, which would allow users to access and potentially modify data remotely. In high security environments, there should be no need for remote users to access data on a computer. Instead, file sharing should be accomplished through the use of network servers.
+# control "xccdf_org.cisecurity.benchmarks_rule_2.2.17_L1_Configure_Deny_access_to_this_computer_from_the_network" do
+#   title "(L1) Configure 'Deny access to this computer from the network'"
+#   desc  "
+#     This policy setting prohibits users from connecting to a computer from across the network, which would allow users to access and potentially modify data remotely. In high security environments, there should be no need for remote users to access data on a computer. Instead, file sharing should be accomplished through the use of network servers.
     
-    * **Level 1 - Domain Controller.** The recommended state for this setting is to include: Guests, Local account.
-    * **Level 1 - Member Server.** The recommended state for this setting is to include: Guests, Local account and member of Administrators group.
-    **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
+#     * **Level 1 - Domain Controller.** The recommended state for this setting is to include: Guests, Local account.
+#     * **Level 1 - Member Server.** The recommended state for this setting is to include: Guests, Local account and member of Administrators group.
+#     **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
     
-    **Note:** Configuring a member server or standalone server as described above may adversely affect applications that create a local service account and place it in the Administrators group - in which case you must either convert the application to use a domain-hosted service account, or remove Local account and member of Administrators group from this User Right Assignment. Using a domain-hosted service account is strongly preferred over making an exception to this rule, where possible.
+#     **Note:** Configuring a member server or standalone server as described above may adversely affect applications that create a local service account and place it in the Administrators group - in which case you must either convert the application to use a domain-hosted service account, or remove Local account and member of Administrators group from this User Right Assignment. Using a domain-hosted service account is strongly preferred over making an exception to this rule, where possible.
     
-    Rationale: Users who can log on to the computer over the network can enumerate lists of account names, group names, and shared resources. Users with permission to access shared folders and files can connect over the network and possibly view or modify data.
-  "
-  impact 1.0
-  security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.gids.entries)).uniq
-  security_principals.each do |entry|
-    describe security_policy do
-      its("SeDenyNetworkLogonRight") { should include entry }
-    end
-  end
-end
+#     Rationale: Users who can log on to the computer over the network can enumerate lists of account names, group names, and shared resources. Users with permission to access shared folders and files can connect over the network and possibly view or modify data.
+#   "
+#   impact 1.0
+#   security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.gids.entries)).uniq
+#   security_principals.each do |entry|
+#     describe security_policy do
+#       its("SeDenyNetworkLogonRight") { should include entry }
+#     end
+#   end
+# end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.18_L1_Ensure_Deny_log_on_as_a_batch_job_to_include_Guests" do
   title "(L1) Ensure 'Deny log on as a batch job' to include 'Guests'"
@@ -1651,25 +1651,25 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.5_L1_Ensure_Network_access_
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.6_L1_Configure_Network_access_Named_Pipes_that_can_be_accessed_anonymously" do
-  title "(L1) Configure 'Network access: Named Pipes that can be accessed anonymously'"
-  desc  "
-    This policy setting determines which communication sessions, or pipes, will have attributes and permissions that allow anonymous access.
+# control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.6_L1_Configure_Network_access_Named_Pipes_that_can_be_accessed_anonymously" do
+#   title "(L1) Configure 'Network access: Named Pipes that can be accessed anonymously'"
+#   desc  "
+#     This policy setting determines which communication sessions, or pipes, will have attributes and permissions that allow anonymous access.
     
-    The recommended state for this setting is:
+#     The recommended state for this setting is:
     
-    * **Level 1 - Domain Controller.** The recommended state for this setting is: LSARPC, NETLOGON, SAMR and (when the legacy **Computer Browser** service is enabled) BROWSER.
-    * **Level 1 - Member Server.** The recommended state for this setting is: 
-    <blank> (i.e. None), or (when the legacy **Computer Browser** service is enabled) BROWSER.
-    **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Licensing** Role Service will require a special exception to this recommendation, to allow the HydraLSPipe and TermServLicensing Named Pipes to be accessed anonymously.</blank>
+#     * **Level 1 - Domain Controller.** The recommended state for this setting is: LSARPC, NETLOGON, SAMR and (when the legacy **Computer Browser** service is enabled) BROWSER.
+#     * **Level 1 - Member Server.** The recommended state for this setting is: 
+#     <blank> (i.e. None), or (when the legacy **Computer Browser** service is enabled) BROWSER.
+#     **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Licensing** Role Service will require a special exception to this recommendation, to allow the HydraLSPipe and TermServLicensing Named Pipes to be accessed anonymously.</blank>
     
-    Rationale: Limiting named pipes that can be accessed anonymously will reduce the attack surface of the system.
-  "
-  impact 1.0
-  describe(registry_key("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters")) do
-    its('NullSessionPipes') { should be_empty }
-  end
-end
+#     Rationale: Limiting named pipes that can be accessed anonymously will reduce the attack surface of the system.
+#   "
+#   impact 1.0
+#   describe(registry_key("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters")) do
+#     its('NullSessionPipes') { should be_empty }
+#   end
+# end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.7_L1_Configure_Network_access_Remotely_accessible_registry_paths" do
   title "(L1) Configure 'Network access: Remotely accessible registry paths'"
@@ -4442,7 +4442,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_18.9.41.4_L1_Ensure_Configure_Pass
   impact 1.0
   describe registry_key("HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\MicrosoftEdge\\Main") do
     it { should have_property "FormSuggest Passwords" }
-    its("FormSuggest Passwords") { should cmp "no" }
+    its("FormSuggest Passwords") { should cmp == 0 }
   end
 end
 

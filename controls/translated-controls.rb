@@ -2021,21 +2021,20 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.3.11.10_L1_Ensure_Network_securi
   end
 end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.13.1_L1_Ensure_Shutdown_Allow_system_to_be_shut_down_without_having_to_log_on_is_set_to_Disabled" do
-#   title "(L1) Ensure 'Shutdown: Allow system to be shut down without having to log on' is set to 'Disabled'"
-#   desc  "
-#     This policy setting determines whether a computer can be shut down when a user is not logged on. If this policy setting is enabled, the shutdown command is available on the Windows logon screen. It is recommended to disable this policy setting to restrict the ability to shut down the computer to users with credentials on the system.
-    
-#     The recommended state for this setting is: Disabled. **Note:** In Server 2008 R2 and older versions, this setting had no impact on Remote Desktop (RDP) / Terminal Services sessions - it only affected the local console. However, Microsoft changed the behavior in Windows Server 2012 (non-R2) and above, where if set to Enabled, RDP sessions are also allowed to shut down or restart the server.
-    
-#     Rationale: Users who can access the console locally could shut down the computer. Attackers could also walk to the local console and restart the server, which would cause a temporary DoS condition. Attackers could also shut down the server and leave all of its applications and services unavailable. As noted in the Description above, the Denial of Service (DoS) risk of enabling this setting dramatically increases in Windows Server 2012 (non-R2) and above, as even remote users can shut down or restart the server.
-#   "
-#   impact 1.0
-#   describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
-#     it { should have_property "ShutdownWithoutLogon" }
-#     its("ShutdownWithoutLogon") { should cmp == 0 }
-#   end
-# end
+# 2.3.13.1 (L1) Ensure 'Shutdown: Allow system to be shut down without having to log on' is set to 'Disabled'
+control '2.3.13.1' do
+  impact 1.0
+  title 'Ensure Shutdown: Allow system to be shut down without having to log on is set to Disabled'
+  desc 'Ensure Shutdown: Allow system to be shut down without having to log on is set to Disabled'
+  tag 'cis-level-1', 'cis-2.3.13.1'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+
+  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System') do
+    it { should exist }
+    it { should have_property_value('ShutdownWithoutLogon', :type_dword, 0) }
+  end
+end
+
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.15.1_L1_Ensure_System_objects_Require_case_insensitivity_for_non-Windows_subsystems_is_set_to_Enabled" do
   title "(L1) Ensure 'System objects: Require case insensitivity for non-Windows subsystems' is set to 'Enabled'"

@@ -1030,41 +1030,41 @@ end
 #   end
 # end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.2_L1_Ensure_Accounts_Block_Microsoft_accounts_is_set_to_Users_cant_add_or_log_on_with_Microsoft_accounts" do
-#   title "(L1) Ensure 'Accounts: Block Microsoft accounts' is set to 'Users can't add or log on with Microsoft accounts'"
-#   desc  "
-#     This policy setting prevents users from adding new Microsoft accounts on this computer.
+control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.2_L1_Ensure_Accounts_Block_Microsoft_accounts_is_set_to_Users_cant_add_or_log_on_with_Microsoft_accounts" do
+  title "(L1) Ensure 'Accounts: Block Microsoft accounts' is set to 'Users can't add or log on with Microsoft accounts'"
+  desc  "
+    This policy setting prevents users from adding new Microsoft accounts on this computer.
     
-#     The recommended state for this setting is: Users can't add or log on with Microsoft accounts.
+    The recommended state for this setting is: Users can't add or log on with Microsoft accounts.
     
-#     Rationale: Organizations that want to effectively implement identity management policies and maintain firm control of what accounts are used to log onto their computers will probably want to block Microsoft accounts. Organizations may also need to block Microsoft accounts in order to meet the requirements of compliance standards that apply to their information systems.
-#   "
-#   impact 1.0
-#   describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
-#     it { should have_property "NoConnectedUser" }
-#     its("NoConnectedUser") { should cmp == 3 }
-#   end
-# end
+    Rationale: Organizations that want to effectively implement identity management policies and maintain firm control of what accounts are used to log onto their computers will probably want to block Microsoft accounts. Organizations may also need to block Microsoft accounts in order to meet the requirements of compliance standards that apply to their information systems.
+  "
+  impact 1.0
+  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
+    it { should have_property "NoConnectedUser" }
+    its("NoConnectedUser") { should cmp == 3 }
+  end
+end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.3_L1_Ensure_Accounts_Guest_account_status_is_set_to_Disabled" do
-#   title "(L1) Ensure 'Accounts: Guest account status' is set to 'Disabled'"
-#   desc  "
-#     This policy setting determines whether the Guest account is enabled or disabled. The Guest account allows unauthenticated network users to gain access to the system.
+control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.3_L1_Ensure_Accounts_Guest_account_status_is_set_to_Disabled" do
+  title "(L1) Ensure 'Accounts: Guest account status' is set to 'Disabled'"
+  desc  "
+    This policy setting determines whether the Guest account is enabled or disabled. The Guest account allows unauthenticated network users to gain access to the system.
     
-#     The recommended state for this setting is: Disabled.
+    The recommended state for this setting is: Disabled.
     
-#     **Note:** This setting will have no impact when applied to the domain controller organizational unit via group policy because domain controllers have no local account database. It can be configured at the domain level via group policy, similar to account lockout and password policy settings.
+    **Note:** This setting will have no impact when applied to the domain controller organizational unit via group policy because domain controllers have no local account database. It can be configured at the domain level via group policy, similar to account lockout and password policy settings.
     
-#     Rationale: The default Guest account allows unauthenticated network users to log on as Guest with no password. These unauthorized users could access any resources that are accessible to the Guest account over the network. This capability means that any network shares with permissions that allow access to the Guest account, the Guests group, or the Everyone group will be accessible over the network, which could lead to the exposure or corruption of data.
-#   "
-#   impact 1.0
-#   describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-501/ } do
-#     it { should exist }
-#   end
-#   describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-501/ } do
-#     it { should be_disabled }
-#   end
-# end
+    Rationale: The default Guest account allows unauthenticated network users to log on as Guest with no password. These unauthorized users could access any resources that are accessible to the Guest account over the network. This capability means that any network shares with permissions that allow access to the Guest account, the Guests group, or the Everyone group will be accessible over the network, which could lead to the exposure or corruption of data.
+  "
+  impact 1.0
+  describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-501/ } do
+    it { should exist }
+  end
+  describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-501/ } do
+    it { should be_disabled }
+  end
+end
 
 # control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.4_L1_Ensure_Accounts_Limit_local_account_use_of_blank_passwords_to_console_logon_only_is_set_to_Enabled" do
 #   title "(L1) Ensure 'Accounts: Limit local account use of blank passwords to console logon only' is set to 'Enabled'"
@@ -1097,18 +1097,18 @@ end
 #   end
 # end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.6_L1_Configure_Accounts_Rename_guest_account" do
-#   title "(L1) Configure 'Accounts: Rename guest account'"
-#   desc  "
-#     The built-in local guest account is another well-known name to attackers. It is recommended to rename this account to something that does not indicate its purpose. Even if you disable this account, which is recommended, ensure that you rename it for added security. On Domain Controllers, since they do not have their own local accounts, this rule refers to the built-in Guest account that was established when the domain was first created.
+control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.6_L1_Configure_Accounts_Rename_guest_account" do
+  title "(L1) Configure 'Accounts: Rename guest account'"
+  desc  "
+    The built-in local guest account is another well-known name to attackers. It is recommended to rename this account to something that does not indicate its purpose. Even if you disable this account, which is recommended, ensure that you rename it for added security. On Domain Controllers, since they do not have their own local accounts, this rule refers to the built-in Guest account that was established when the domain was first created.
     
-#     Rationale: The Guest account exists on all computers that run the Windows 2000 or later operating systems. If you rename this account. it is slightly more difficult for unauthorized persons to guess this privileged user name and password combination.
-#   "
-#   impact 1.0
-#   describe user("Guest") do
-#     it { should_not exist }
-#   end
-# end
+    Rationale: The Guest account exists on all computers that run the Windows 2000 or later operating systems. If you rename this account. it is slightly more difficult for unauthorized persons to guess this privileged user name and password combination.
+  "
+  impact 1.0
+  describe user("Guest") do
+    it { should_not exist }
+  end
+end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.2.1_L1_Ensure_Audit_Force_audit_policy_subcategory_settings_Windows_Vista_or_later_to_override_audit_policy_category_settings_is_set_to_Enabled" do
   title "(L1) Ensure 'Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings' is set to 'Enabled'"

@@ -2560,21 +2560,21 @@ control "xccdf_org.cisecurity.benchmarks_rule_9.3.1_L1_Ensure_Windows_Firewall_P
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_9.3.2_L1_Ensure_Windows_Firewall_Public_Inbound_connections_is_set_to_Block_default" do
-  title "(L1) Ensure 'Windows Firewall: Public: Inbound connections' is set to 'Block (default)'"
-  desc  "
-    This setting determines the behavior for inbound connections that do not match an inbound firewall rule.
-    
-    The recommended state for this setting is: Block (default).
-    
-    Rationale: If the firewall allows all traffic to access the system then an attacker may be more easily able to remotely exploit a weakness in a network service.
-  "
-  impact 1.0
-  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\WindowsFirewall\\PublicProfile") do
-    it { should have_property "DefaultInboundAction" }
-    its("DefaultInboundAction") { should cmp == 1 }
-  end
-end
+#control "xccdf_org.cisecurity.benchmarks_rule_9.3.2_L1_Ensure_Windows_Firewall_Public_Inbound_connections_is_set_to_Block_default" do
+#  title "(L1) Ensure 'Windows Firewall: Public: Inbound connections' is set to 'Block (default)'"
+#  desc  "
+#    This setting determines the behavior for inbound connections that do not match an inbound firewall rule.
+#    
+#    The recommended state for this setting is: Block (default).
+#    
+#    Rationale: If the firewall allows all traffic to access the system then an attacker may be more easily able to remotely exploit a weakness in a network service.
+#  "
+#  impact 1.0
+#  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\WindowsFirewall\\PublicProfile") do
+#    it { should have_property "DefaultInboundAction" }
+#    its("DefaultInboundAction") { should cmp == 1 }
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_9.3.3_L1_Ensure_Windows_Firewall_Public_Outbound_connections_is_set_to_Allow_default" do
   title "(L1) Ensure 'Windows Firewall: Public: Outbound connections' is set to 'Allow (default)'"

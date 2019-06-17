@@ -331,26 +331,26 @@ end
 #  end
 #end
 
-control "xccdf_org.cisecurity.benchmarks_rule_2.2.7_L1_Configure_Allow_log_on_through_Remote_Desktop_Services" do
-  title "(L1) Configure 'Allow log on through Remote Desktop Services'"
-  desc  "
-    This policy setting determines which users or groups have the right to log on as a Terminal Services client. Remote desktop users require this user right. If your organization uses Remote Assistance as part of its help desk strategy, create a group and assign it this user right through Group Policy. If the help desk in your organization does not use Remote Assistance, assign this user right only to the Administrators group or use the restricted groups feature to ensure that no user accounts are part of the Remote Desktop Users group.
+#control "xccdf_org.cisecurity.benchmarks_rule_2.2.7_L1_Configure_Allow_log_on_through_Remote_Desktop_Services" do
+#  title "(L1) Configure 'Allow log on through Remote Desktop Services'"
+#  desc  "
+#    This policy setting determines which users or groups have the right to log on as a Terminal Services client. Remote desktop users require this user right. If your organization uses Remote Assistance as part of its help desk strategy, create a group and assign it this user right through Group Policy. If the help desk in your organization does not use Remote Assistance, assign this user right only to the Administrators group or use the restricted groups feature to ensure that no user accounts are part of the Remote Desktop Users group.
     
-    Restrict this user right to the Administrators group, and possibly the Remote Desktop Users group, to prevent unwanted users from gaining access to computers on your network by means of the Remote Assistance feature.
+#    Restrict this user right to the Administrators group, and possibly the Remote Desktop Users group, to prevent unwanted users from gaining access to computers on your network by means of the Remote Assistance feature.
     
-    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators.
-    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators, Remote Desktop Users.
-    **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Connection Broker** Role Service will require a special exception to this recommendation, to allow the Authenticated Users group to be granted this user right.
+#    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators.
+#    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators, Remote Desktop Users.
+#    **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Connection Broker** Role Service will require a special exception to this recommendation, to allow the Authenticated Users group to be granted this user right.
     
-    **Note #2:** The above lists are to be treated as whitelists, which implies that the above principals need not be present for assessment of this recommendation to pass.
+#    **Note #2:** The above lists are to be treated as whitelists, which implies that the above principals need not be present for assessment of this recommendation to pass.
     
-    Rationale: Any account with the Allow log on through Terminal Services user right can log on to the remote console of the computer. If you do not restrict this user right to legitimate users who need to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
-  "
-  impact 1.0
-  describe security_policy do
-    its("SeRemoteInteractiveLogonRight") { should eq ["S-1-5-32-544", "S-1-5-32-555"] }
-  end
-end
+#    Rationale: Any account with the Allow log on through Terminal Services user right can log on to the remote console of the computer. If you do not restrict this user right to legitimate users who need to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
+#  "
+#  impact 1.0
+#  describe security_policy do
+#    its("SeRemoteInteractiveLogonRight") { should eq ["S-1-5-32-544", "S-1-5-32-555"] }
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.8_L1_Ensure_Back_up_files_and_directories_is_set_to_Administrators" do
   title "(L1) Ensure 'Back up files and directories' is set to 'Administrators'"

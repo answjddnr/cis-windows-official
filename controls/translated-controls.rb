@@ -1292,21 +1292,21 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.3.6.6_L1_Ensure_Domain_member_Re
   end
 end
 
-#control "xccdf_org.cisecurity.benchmarks_rule_2.3.7.1_L1_Ensure_Interactive_logon_Do_not_display_last_user_name_is_set_to_Enabled" do
-#  title "(L1) Ensure 'Interactive logon: Do not display last user name' is set to 'Enabled'"
-#  desc  "
-#    This policy setting determines whether the account name of the last user to log on to the client computers in your organization will be displayed in each computer's respective Windows logon screen. Enable this policy setting to prevent intruders from collecting account names visually from the screens of desktop or laptop computers in your organization.
+control "xccdf_org.cisecurity.benchmarks_rule_2.3.7.1_L1_Ensure_Interactive_logon_Do_not_display_last_user_name_is_set_to_Enabled" do
+  title "(L1) Ensure 'Interactive logon: Do not display last user name' is set to 'Enabled'"
+  desc  "
+    This policy setting determines whether the account name of the last user to log on to the client computers in your organization will be displayed in each computer's respective Windows logon screen. Enable this policy setting to prevent intruders from collecting account names visually from the screens of desktop or laptop computers in your organization.
     
-#    The recommended state for this setting is: Enabled.
+    The recommended state for this setting is: Enabled.
     
-#    Rationale: An attacker with access to the console (for example, someone with physical access or someone who is able to connect to the server through Terminal Services) could view the name of the last user who logged on to the server. The attacker could then try to guess the password, use a dictionary, or use a brute-force attack to try and log on.
-#  "
-#  impact 1.0
-#  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
-#    it { should have_property "DontDisplayLastUserName" }
-#    its("DontDisplayLastUserName") { should cmp == 1 }
-#  end
-#end
+    Rationale: An attacker with access to the console (for example, someone with physical access or someone who is able to connect to the server through Terminal Services) could view the name of the last user who logged on to the server. The attacker could then try to guess the password, use a dictionary, or use a brute-force attack to try and log on.
+  "
+  impact 1.0
+  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
+    it { should have_property "DontDisplayLastUserName" }
+    its("DontDisplayLastUserName") { should cmp == 1 }
+  end
+end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.7.2_L1_Ensure_Interactive_logon_Do_not_require_CTRLALTDEL_is_set_to_Disabled" do
   title "(L1) Ensure 'Interactive logon: Do not require CTRL+ALT+DEL' is set to 'Disabled'"

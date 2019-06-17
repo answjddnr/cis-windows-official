@@ -310,47 +310,47 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.5_L1_Ensure_Adjust_memory_quot
   end
 end
 
-#control "xccdf_org.cisecurity.benchmarks_rule_2.2.6_L1_Configure_Allow_log_on_locally" do
-#  title "(L1) Configure 'Allow log on locally'"
-#  desc  "
-#    This policy setting determines which users can interactively log on to computers in your environment. Logons that are initiated by pressing the CTRL+ALT+DEL key sequence on the client computer keyboard require this user right. Users who attempt to log on through Terminal Services or IIS also require this user right.
+control "xccdf_org.cisecurity.benchmarks_rule_2.2.6_L1_Configure_Allow_log_on_locally" do
+  title "(L1) Configure 'Allow log on locally'"
+  desc  "
+    This policy setting determines which users can interactively log on to computers in your environment. Logons that are initiated by pressing the CTRL+ALT+DEL key sequence on the client computer keyboard require this user right. Users who attempt to log on through Terminal Services or IIS also require this user right.
     
-#    The Guest account is assigned this user right by default. Although this account is disabled by default, it is recommended that you enable this setting through Group Policy. However, this user right should generally be restricted to the Administrators and Users groups. Assign this user right to the Backup Operators group if your organization requires that they have this capability.
+    The Guest account is assigned this user right by default. Although this account is disabled by default, it is recommended that you enable this setting through Group Policy. However, this user right should generally be restricted to the Administrators and Users groups. Assign this user right to the Backup Operators group if your organization requires that they have this capability.
     
-#    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators, ENTERPRISE DOMAIN CONTROLLERS.
-#    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators.
+    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators, ENTERPRISE DOMAIN CONTROLLERS.
+    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators.
     
-#    Rationale: Any account with the Allow log on locally user right can log on at the console of the computer. If you do not restrict this user right to legitimate users who need to be able to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
-#  "
-#  impact 1.0
-#  security_principals = (users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries) - (users.where { username.casecmp('Administrators') == 0}.uids.entries + groups.where { name.casecmp('Administrators') == 0}.gids.entries).uniq
-#  security_principals.each do |entry|
-#    describe security_policy do
-#      its("SeInteractiveLogonRight") { should_not include entry }
-#    end
-#  end
-#end
+    Rationale: Any account with the Allow log on locally user right can log on at the console of the computer. If you do not restrict this user right to legitimate users who need to be able to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
+  "
+  impact 1.0
+  security_principals = (users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries) - (users.where { username.casecmp('Administrators') == 0}.uids.entries + groups.where { name.casecmp('Administrators') == 0}.gids.entries).uniq
+  security_principals.each do |entry|
+    describe security_policy do
+      its("SeInteractiveLogonRight") { should_not include entry }
+    end
+  end
+end
 
-#control "xccdf_org.cisecurity.benchmarks_rule_2.2.7_L1_Configure_Allow_log_on_through_Remote_Desktop_Services" do
-#  title "(L1) Configure 'Allow log on through Remote Desktop Services'"
-#  desc  "
-#    This policy setting determines which users or groups have the right to log on as a Terminal Services client. Remote desktop users require this user right. If your organization uses Remote Assistance as part of its help desk strategy, create a group and assign it this user right through Group Policy. If the help desk in your organization does not use Remote Assistance, assign this user right only to the Administrators group or use the restricted groups feature to ensure that no user accounts are part of the Remote Desktop Users group.
+control "xccdf_org.cisecurity.benchmarks_rule_2.2.7_L1_Configure_Allow_log_on_through_Remote_Desktop_Services" do
+  title "(L1) Configure 'Allow log on through Remote Desktop Services'"
+  desc  "
+    This policy setting determines which users or groups have the right to log on as a Terminal Services client. Remote desktop users require this user right. If your organization uses Remote Assistance as part of its help desk strategy, create a group and assign it this user right through Group Policy. If the help desk in your organization does not use Remote Assistance, assign this user right only to the Administrators group or use the restricted groups feature to ensure that no user accounts are part of the Remote Desktop Users group.
     
-#    Restrict this user right to the Administrators group, and possibly the Remote Desktop Users group, to prevent unwanted users from gaining access to computers on your network by means of the Remote Assistance feature.
+    Restrict this user right to the Administrators group, and possibly the Remote Desktop Users group, to prevent unwanted users from gaining access to computers on your network by means of the Remote Assistance feature.
     
-#    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators.
-#    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators, Remote Desktop Users.
-#    **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Connection Broker** Role Service will require a special exception to this recommendation, to allow the Authenticated Users group to be granted this user right.
+    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators.
+    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators, Remote Desktop Users.
+    **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Connection Broker** Role Service will require a special exception to this recommendation, to allow the Authenticated Users group to be granted this user right.
     
-#    **Note #2:** The above lists are to be treated as whitelists, which implies that the above principals need not be present for assessment of this recommendation to pass.
+    **Note #2:** The above lists are to be treated as whitelists, which implies that the above principals need not be present for assessment of this recommendation to pass.
     
-#    Rationale: Any account with the Allow log on through Terminal Services user right can log on to the remote console of the computer. If you do not restrict this user right to legitimate users who need to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
-#  "
-#  impact 1.0
-#  describe security_policy do
-#    its("SeRemoteInteractiveLogonRight") { should eq ["S-1-5-32-544", "S-1-5-32-555"] }
-#  end
-#end
+    Rationale: Any account with the Allow log on through Terminal Services user right can log on to the remote console of the computer. If you do not restrict this user right to legitimate users who need to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
+  "
+  impact 1.0
+  describe security_policy do
+    its("SeRemoteInteractiveLogonRight") { should eq ["S-1-5-32-544", "S-1-5-32-555"] }
+  end
+end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.8_L1_Ensure_Back_up_files_and_directories_is_set_to_Administrators" do
   title "(L1) Ensure 'Back up files and directories' is set to 'Administrators'"
@@ -1292,21 +1292,21 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.3.6.6_L1_Ensure_Domain_member_Re
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_2.3.7.1_L1_Ensure_Interactive_logon_Do_not_display_last_user_name_is_set_to_Enabled" do
-  title "(L1) Ensure 'Interactive logon: Do not display last user name' is set to 'Enabled'"
-  desc  "
-    This policy setting determines whether the account name of the last user to log on to the client computers in your organization will be displayed in each computer's respective Windows logon screen. Enable this policy setting to prevent intruders from collecting account names visually from the screens of desktop or laptop computers in your organization.
+#control "xccdf_org.cisecurity.benchmarks_rule_2.3.7.1_L1_Ensure_Interactive_logon_Do_not_display_last_user_name_is_set_to_Enabled" do
+#  title "(L1) Ensure 'Interactive logon: Do not display last user name' is set to 'Enabled'"
+#  desc  "
+#    This policy setting determines whether the account name of the last user to log on to the client computers in your organization will be displayed in each computer's respective Windows logon screen. Enable this policy setting to prevent intruders from collecting account names visually from the screens of desktop or laptop computers in your organization.
     
-    The recommended state for this setting is: Enabled.
+#    The recommended state for this setting is: Enabled.
     
-    Rationale: An attacker with access to the console (for example, someone with physical access or someone who is able to connect to the server through Terminal Services) could view the name of the last user who logged on to the server. The attacker could then try to guess the password, use a dictionary, or use a brute-force attack to try and log on.
-  "
-  impact 1.0
-  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
-    it { should have_property "DontDisplayLastUserName" }
-    its("DontDisplayLastUserName") { should cmp == 1 }
-  end
-end
+#    Rationale: An attacker with access to the console (for example, someone with physical access or someone who is able to connect to the server through Terminal Services) could view the name of the last user who logged on to the server. The attacker could then try to guess the password, use a dictionary, or use a brute-force attack to try and log on.
+#  "
+#  impact 1.0
+#  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
+#    it { should have_property "DontDisplayLastUserName" }
+#    its("DontDisplayLastUserName") { should cmp == 1 }
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.7.2_L1_Ensure_Interactive_logon_Do_not_require_CTRLALTDEL_is_set_to_Disabled" do
   title "(L1) Ensure 'Interactive logon: Do not require CTRL+ALT+DEL' is set to 'Disabled'"

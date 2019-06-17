@@ -310,26 +310,26 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.5_L1_Ensure_Adjust_memory_quot
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_2.2.6_L1_Configure_Allow_log_on_locally" do
-  title "(L1) Configure 'Allow log on locally'"
-  desc  "
-    This policy setting determines which users can interactively log on to computers in your environment. Logons that are initiated by pressing the CTRL+ALT+DEL key sequence on the client computer keyboard require this user right. Users who attempt to log on through Terminal Services or IIS also require this user right.
+#control "xccdf_org.cisecurity.benchmarks_rule_2.2.6_L1_Configure_Allow_log_on_locally" do
+#  title "(L1) Configure 'Allow log on locally'"
+#  desc  "
+#    This policy setting determines which users can interactively log on to computers in your environment. Logons that are initiated by pressing the CTRL+ALT+DEL key sequence on the client computer keyboard require this user right. Users who attempt to log on through Terminal Services or IIS also require this user right.
     
-    The Guest account is assigned this user right by default. Although this account is disabled by default, it is recommended that you enable this setting through Group Policy. However, this user right should generally be restricted to the Administrators and Users groups. Assign this user right to the Backup Operators group if your organization requires that they have this capability.
+#    The Guest account is assigned this user right by default. Although this account is disabled by default, it is recommended that you enable this setting through Group Policy. However, this user right should generally be restricted to the Administrators and Users groups. Assign this user right to the Backup Operators group if your organization requires that they have this capability.
     
-    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators, ENTERPRISE DOMAIN CONTROLLERS.
-    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators.
+#    * **Level 1 - Domain Controller.** The recommended state for this setting is: Administrators, ENTERPRISE DOMAIN CONTROLLERS.
+#    * **Level 1 - Member Server.** The recommended state for this setting is: Administrators.
     
-    Rationale: Any account with the Allow log on locally user right can log on at the console of the computer. If you do not restrict this user right to legitimate users who need to be able to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
-  "
-  impact 1.0
-  security_principals = (users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries) - (users.where { username.casecmp('Administrators') == 0}.uids.entries + groups.where { name.casecmp('Administrators') == 0}.gids.entries).uniq
-  security_principals.each do |entry|
-    describe security_policy do
-      its("SeInteractiveLogonRight") { should_not include entry }
-    end
-  end
-end
+#    Rationale: Any account with the Allow log on locally user right can log on at the console of the computer. If you do not restrict this user right to legitimate users who need to be able to log on to the console of the computer, unauthorized users could download and run malicious software to elevate their privileges.
+#  "
+#  impact 1.0
+#  security_principals = (users.where { username =~ /.*/}.uids.entries + groups.where { name =~ /.*/}.gids.entries) - (users.where { username.casecmp('Administrators') == 0}.uids.entries + groups.where { name.casecmp('Administrators') == 0}.gids.entries).uniq
+#  security_principals.each do |entry|
+#    describe security_policy do
+#      its("SeInteractiveLogonRight") { should_not include entry }
+#    end
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.7_L1_Configure_Allow_log_on_through_Remote_Desktop_Services" do
   title "(L1) Configure 'Allow log on through Remote Desktop Services'"

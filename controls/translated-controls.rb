@@ -196,7 +196,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_1.2.1_L1_Ensure_Account_lockout_du
   "
   impact 1.0
   describe security_policy do
-    its("LockoutDuration") { should be >= 900 }
+    its("LockoutDuration") { should be >= 15 }
   end
 end
 
@@ -231,7 +231,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_1.2.3_L1_Ensure_Reset_account_lock
   "
   impact 1.0
   describe security_policy do
-    its("ResetLockoutCount") { should be >= 900 }
+    its("ResetLockoutCount") { should be >= 15 }
   end
 end
 

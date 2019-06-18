@@ -645,25 +645,25 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.20_L1_Ensure_Deny_log_on_local
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_2.2.21_L1_Ensure_Deny_log_on_through_Remote_Desktop_Services_to_include_Guests_Local_account" do
-  title "(L1) Ensure 'Deny log on through Remote Desktop Services' to include 'Guests, Local account'"
-  desc  "
-    This policy setting determines whether users can log on as Terminal Services clients. After the baseline member server is joined to a domain environment, there is no need to use local accounts to access the server from the network. Domain accounts can access the server for administration and end-user processing.
+#control "xccdf_org.cisecurity.benchmarks_rule_2.2.21_L1_Ensure_Deny_log_on_through_Remote_Desktop_Services_to_include_Guests_Local_account" do
+#  title "(L1) Ensure 'Deny log on through Remote Desktop Services' to include 'Guests, Local account'"
+#  desc  "
+#    This policy setting determines whether users can log on as Terminal Services clients. After the baseline member server is joined to a domain environment, there is no need to use local accounts to access the server from the network. Domain accounts can access the server for administration and end-user processing.
     
-    The recommended state for this setting is to include: Guests, Local account.
+#    The recommended state for this setting is to include: Guests, Local account.
     
-    **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
+#    **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
     
-    Rationale: Any account with the right to log on through Terminal Services could be used to log on to the remote console of the computer. If this user right is not restricted to legitimate users who need to log on to the console of the computer, unauthorized users might download and run malicious software that elevates their privileges.
-  "
-  impact 1.0
-  security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account$/}.gids.entries)).uniq
-  security_principals.each do |entry|
-    describe security_policy do
-      its("SeDenyRemoteInteractiveLogonRight") { should include entry }
-    end
-  end
-end
+#    Rationale: Any account with the right to log on through Terminal Services could be used to log on to the remote console of the computer. If this user right is not restricted to legitimate users who need to log on to the console of the computer, unauthorized users might download and run malicious software that elevates their privileges.
+#  "
+#  impact 1.0
+#  security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account$/}.gids.entries)).uniq
+#  security_principals.each do |entry|
+#    describe security_policy do
+#      its("SeDenyRemoteInteractiveLogonRight") { should include entry }
+#    end
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.22_L1_Configure_Enable_computer_and_user_accounts_to_be_trusted_for_delegation" do
   title "(L1) Configure 'Enable computer and user accounts to be trusted for delegation'"

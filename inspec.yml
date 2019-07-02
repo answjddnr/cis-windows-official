@@ -11,3 +11,6 @@ copyright_email: support@chef.io
 license: Proprietary, All rights reserved
 supports:
 - platform-family: windows
+depends:
+ - name: cis-windows-official
+   url: https://github.com/answjddnr/cis-windows-official/archive/master.tar.gz

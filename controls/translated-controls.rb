@@ -252,7 +252,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.1_L1_Ensure_Access_Credential_
   end
 end
 
-skip_control "xccdf_org.cisecurity.benchmarks_rule_2.2.2_L1_Configure_Access_this_computer_from_the_network" do
+skip_control "xccdf_org.cisecurity.benchmarks_rule_2.2.2_L1_Configure_Access_this_computer_from_the_network"
 #   title "(L1) Configure 'Access this computer from the network'"
 #   desc  "
 #     This policy setting allows other users on the network to connect to the computer and is required by various network protocols that include Server Message Block (SMB)based protocols, NetBIOS, Common Internet File System (CIFS), and Component Object Model Plus (COM+).
@@ -564,7 +564,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.16_L1_Ensure_Debug_programs_is
   end
 end
 
-skip_control "xccdf_org.cisecurity.benchmarks_rule_2.2.17_L1_Configure_Deny_access_to_this_computer_from_the_network" do
+skip_control "xccdf_org.cisecurity.benchmarks_rule_2.2.17_L1_Configure_Deny_access_to_this_computer_from_the_network"
 #   title "(L1) Configure 'Deny access to this computer from the network'"
 #   desc  "
 #     This policy setting prohibits users from connecting to a computer from across the network, which would allow users to access and potentially modify data remotely. In high security environments, there should be no need for remote users to access data on a computer. Instead, file sharing should be accomplished through the use of network servers.
@@ -645,7 +645,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.20_L1_Ensure_Deny_log_on_local
   end
 end
 
-skip_control "xccdf_org.cisecurity.benchmarks_rule_2.2.21_L1_Ensure_Deny_log_on_through_Remote_Desktop_Services_to_include_Guests_Local_account" do
+skip_control "xccdf_org.cisecurity.benchmarks_rule_2.2.21_L1_Ensure_Deny_log_on_through_Remote_Desktop_Services_to_include_Guests_Local_account"
 #  title "(L1) Ensure 'Deny log on through Remote Desktop Services' to include 'Guests, Local account'"
 #  desc  "
 #    This policy setting determines whether users can log on as Terminal Services clients. After the baseline member server is joined to a domain environment, there is no need to use local accounts to access the server from the network. Domain accounts can access the server for administration and end-user processing.
@@ -1012,7 +1012,7 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.40_L1_Ensure_Take_ownership_of
   end
 end
 
-skip_control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.1_L1_Ensure_Accounts_Administrator_account_status_is_set_to_Disabled" do
+skip_control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.1_L1_Ensure_Accounts_Administrator_account_status_is_set_to_Disabled"
 #   title "(L1) Ensure 'Accounts: Administrator account status' is set to 'Disabled'"
 #   desc  "
 #     This policy setting enables or disables the Administrator account during normal operation. When a computer is booted into safe mode, the Administrator account is always enabled, regardless of how this setting is configured. Note that this setting will have no impact when applied to the domain controller organizational unit via group policy because domain controllers have no local account database. It can be configured at the domain level via group policy, similar to account lockout and password policy settings.
@@ -1082,7 +1082,7 @@ end
    end
  end
 
-skip_control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.5_L1_Configure_Accounts_Rename_administrator_account" do
+skip_control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.5_L1_Configure_Accounts_Rename_administrator_account"
 #   title "(L1) Configure 'Accounts: Rename administrator account'"
 #   desc  "
 #     The built-in local administrator account is a well-known account name that attackers will target. It is recommended to choose another name for this account, and to avoid names that denote administrative or elevated access accounts. Be sure to also change the default description for the local administrator (through the Computer Management console). On Domain Controllers, since they do not have their own local accounts, this rule refers to the built-in Administrator account that was established when the domain was first created.

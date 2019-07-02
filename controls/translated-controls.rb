@@ -565,27 +565,28 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.16_L1_Ensure_Debug_programs_is
   end
 end
 
-#control "xccdf_org.cisecurity.benchmarks_rule_2.2.17_L1_Configure_Deny_access_to_this_computer_from_the_network" do
-#   title "(L1) Configure 'Deny access to this computer from the network'"
-#   desc  "
-#     This policy setting prohibits users from connecting to a computer from across the network, which would allow users to access and potentially modify data remotely. In high security environments, there should be no need for remote users to access data on a computer. Instead, file sharing should be accomplished through the use of network servers.
+control "xccdf_org.cisecurity.benchmarks_rule_2.2.17_L1_Configure_Deny_access_to_this_computer_from_the_network" do
+   title "(L1) Configure 'Deny access to this computer from the network'"
+   desc  "
+     This policy setting prohibits users from connecting to a computer from across the network, which would allow users to access and potentially modify data remotely. In high security environments, there should be no need for remote users to access data on a computer. Instead, file sharing should be accomplished through the use of network servers.
     
-#     * **Level 1 - Domain Controller.** The recommended state for this setting is to include: Guests, Local account.
-#     * **Level 1 - Member Server.** The recommended state for this setting is to include: Guests, Local account and member of Administrators group.
-#     **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
+     * **Level 1 - Domain Controller.** The recommended state for this setting is to include: Guests, Local account.
+     * **Level 1 - Member Server.** The recommended state for this setting is to include: Guests, Local account and member of Administrators group.
+     **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
     
-#     **Note:** Configuring a member server or standalone server as described above may adversely affect applications that create a local service account and place it in the Administrators group - in which case you must either convert the application to use a domain-hosted service account, or remove Local account and member of Administrators group from this User Right Assignment. Using a domain-hosted service account is strongly preferred over making an exception to this rule, where possible.
+     **Note:** Configuring a member server or standalone server as described above may adversely affect applications that create a local service account and place it in the Administrators group - in which case you must either convert the application to use a domain-hosted service account, or remove Local account and member of Administrators group from this User Right Assignment. Using a domain-hosted service account is strongly preferred over making an exception to this rule, where possible.
     
-#     Rationale: Users who can log on to the computer over the network can enumerate lists of account names, group names, and shared resources. Users with permission to access shared folders and files can connect over the network and possibly view or modify data.
-#   "
-#   impact 1.0
-#   security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.gids.entries)).uniq
-#   security_principals.each do |entry|
-#     describe security_policy do
-#       its("SeDenyNetworkLogonRight") { should include entry }
-#     end
-#   end
-# end
+     Rationale: Users who can log on to the computer over the network can enumerate lists of account names, group names, and shared resources. Users with permission to access shared folders and files can connect over the network and possibly view or modify data.
+   "
+   impact 1.0
+   security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account and member of Administrators group$/}.gids.entries)).uniq
+   security_principals.each do |entry|
+     describe security_policy do
+       # its("SeDenyNetworkLogonRight") { should include entry }
+       skip "this rule skipped due to access requirement"
+     end
+   end
+ end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.18_L1_Ensure_Deny_log_on_as_a_batch_job_to_include_Guests" do
   title "(L1) Ensure 'Deny log on as a batch job' to include 'Guests'"
@@ -646,25 +647,26 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.20_L1_Ensure_Deny_log_on_local
   end
 end
 
-#control "xccdf_org.cisecurity.benchmarks_rule_2.2.21_L1_Ensure_Deny_log_on_through_Remote_Desktop_Services_to_include_Guests_Local_account" do
-#  title "(L1) Ensure 'Deny log on through Remote Desktop Services' to include 'Guests, Local account'"
-#  desc  "
-#    This policy setting determines whether users can log on as Terminal Services clients. After the baseline member server is joined to a domain environment, there is no need to use local accounts to access the server from the network. Domain accounts can access the server for administration and end-user processing.
+control "xccdf_org.cisecurity.benchmarks_rule_2.2.21_L1_Ensure_Deny_log_on_through_Remote_Desktop_Services_to_include_Guests_Local_account" do
+  title "(L1) Ensure 'Deny log on through Remote Desktop Services' to include 'Guests, Local account'"
+  desc  "
+    This policy setting determines whether users can log on as Terminal Services clients. After the baseline member server is joined to a domain environment, there is no need to use local accounts to access the server from the network. Domain accounts can access the server for administration and end-user processing.
     
-#    The recommended state for this setting is to include: Guests, Local account.
+    The recommended state for this setting is to include: Guests, Local account.
     
-#    **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
+    **Caution:** Configuring a standalone (non-domain-joined) server as described above may result in an inability to remotely administer the server.
     
-#    Rationale: Any account with the right to log on through Terminal Services could be used to log on to the remote console of the computer. If this user right is not restricted to legitimate users who need to log on to the console of the computer, unauthorized users might download and run malicious software that elevates their privileges.
-#  "
-#  impact 1.0
-#  security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account$/}.gids.entries)).uniq
-#  security_principals.each do |entry|
-#    describe security_policy do
-#      its("SeDenyRemoteInteractiveLogonRight") { should include entry }
-#    end
-#  end
-#end
+    Rationale: Any account with the right to log on through Terminal Services could be used to log on to the remote console of the computer. If this user right is not restricted to legitimate users who need to log on to the console of the computer, unauthorized users might download and run malicious software that elevates their privileges.
+  "
+  impact 1.0
+  security_principals = ((users.where { username.casecmp('Guests') == 0}.uids.entries + groups.where { name.casecmp('Guests') == 0}.gids.entries) + (users.where { username =~ /^(NT AUTHORITY\\)?Local account$/}.uids.entries + groups.where { name =~ /^(NT AUTHORITY\\)?Local account$/}.gids.entries)).uniq
+  security_principals.each do |entry|
+    describe security_policy do
+      # its("SeDenyRemoteInteractiveLogonRight") { should include entry }
+      skip "this rule skipped due to access requirement"
+    end
+  end
+end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.2.22_L1_Configure_Enable_computer_and_user_accounts_to_be_trusted_for_delegation" do
   title "(L1) Configure 'Enable computer and user accounts to be trusted for delegation'"
@@ -1013,23 +1015,25 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.2.40_L1_Ensure_Take_ownership_of
   end
 end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.1_L1_Ensure_Accounts_Administrator_account_status_is_set_to_Disabled" do
-#   title "(L1) Ensure 'Accounts: Administrator account status' is set to 'Disabled'"
-#   desc  "
-#     This policy setting enables or disables the Administrator account during normal operation. When a computer is booted into safe mode, the Administrator account is always enabled, regardless of how this setting is configured. Note that this setting will have no impact when applied to the domain controller organizational unit via group policy because domain controllers have no local account database. It can be configured at the domain level via group policy, similar to account lockout and password policy settings.
+control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.1_L1_Ensure_Accounts_Administrator_account_status_is_set_to_Disabled" do
+   title "(L1) Ensure 'Accounts: Administrator account status' is set to 'Disabled'"
+   desc  "
+     This policy setting enables or disables the Administrator account during normal operation. When a computer is booted into safe mode, the Administrator account is always enabled, regardless of how this setting is configured. Note that this setting will have no impact when applied to the domain controller organizational unit via group policy because domain controllers have no local account database. It can be configured at the domain level via group policy, similar to account lockout and password policy settings.
     
-#     The recommended state for this setting is: Disabled.
+     The recommended state for this setting is: Disabled.
     
-#     Rationale: In some organizations, it can be a daunting management challenge to maintain a regular schedule for periodic password changes for local accounts. Therefore, you may want to disable the built-in Administrator account instead of relying on regular password changes to protect it from attack. Another reason to disable this built-in account is that it cannot be locked out no matter how many failed logons it accrues, which makes it a prime target for brute force attacks that attempt to guess passwords. Also, this account has a well-known security identifier (SID) and there are third-party tools that allow authentication by using the SID rather than the account name. This capability means that even if you rename the Administrator account, an attacker could launch a brute force attack by using the SID to log on.
-#   "
-#   impact 1.0
-#   describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-500/ } do
-#     it { should exist }
-#   end
-#   describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-500/ } do
-#     it { should be_disabled }
-#   end
-# end
+     Rationale: In some organizations, it can be a daunting management challenge to maintain a regular schedule for periodic password changes for local accounts. Therefore, you may want to disable the built-in Administrator account instead of relying on regular password changes to protect it from attack. Another reason to disable this built-in account is that it cannot be locked out no matter how many failed logons it accrues, which makes it a prime target for brute force attacks that attempt to guess passwords. Also, this account has a well-known security identifier (SID) and there are third-party tools that allow authentication by using the SID rather than the account name. This capability means that even if you rename the Administrator account, an attacker could launch a brute force attack by using the SID to log on.
+   "
+   impact 1.0
+   describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-500/ } do
+     # it { should exist }
+     skip "this rule skipped due to access requirement"
+   end
+   describe users.where { uid =~ /S\-1\-5\-21\-\d+\-\d+\-\d+\-500/ } do
+     #it { should be_disabled }
+     skip "this rule skipped due to access requirement"
+   end
+ end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.2_L1_Ensure_Accounts_Block_Microsoft_accounts_is_set_to_Users_cant_add_or_log_on_with_Microsoft_accounts" do
   title "(L1) Ensure 'Accounts: Block Microsoft accounts' is set to 'Users can't add or log on with Microsoft accounts'"
@@ -1083,20 +1087,21 @@ end
    end
  end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.5_L1_Configure_Accounts_Rename_administrator_account" do
-#   title "(L1) Configure 'Accounts: Rename administrator account'"
-#   desc  "
-#     The built-in local administrator account is a well-known account name that attackers will target. It is recommended to choose another name for this account, and to avoid names that denote administrative or elevated access accounts. Be sure to also change the default description for the local administrator (through the Computer Management console). On Domain Controllers, since they do not have their own local accounts, this rule refers to the built-in Administrator account that was established when the domain was first created.
+ control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.5_L1_Configure_Accounts_Rename_administrator_account" do
+   title "(L1) Configure 'Accounts: Rename administrator account'"
+   desc  "
+     The built-in local administrator account is a well-known account name that attackers will target. It is recommended to choose another name for this account, and to avoid names that denote administrative or elevated access accounts. Be sure to also change the default description for the local administrator (through the Computer Management console). On Domain Controllers, since they do not have their own local accounts, this rule refers to the built-in Administrator account that was established when the domain was first created.
     
-#     Rationale: The Administrator account exists on all computers that run the Windows 2000 or later operating systems. If you rename this account, it is slightly more difficult for unauthorized persons to guess this privileged user name and password combination.
+     Rationale: The Administrator account exists on all computers that run the Windows 2000 or later operating systems. If you rename this account, it is slightly more difficult for unauthorized persons to guess this privileged user name and password combination.
     
-#     The built-in Administrator account cannot be locked out, regardless of how many times an attacker might use a bad password. This capability makes the Administrator account a popular target for brute force attacks that attempt to guess passwords. The value of this countermeasure is lessened because this account has a well-known SID, and there are third-party tools that allow authentication by using the SID rather than the account name. Therefore, even if you rename the Administrator account, an attacker could launch a brute force attack by using the SID to log on.
-#   "
-#   impact 1.0
-#   describe user("Administrator") do
-#     it { should_not exist }
-#   end
-# end
+     The built-in Administrator account cannot be locked out, regardless of how many times an attacker might use a bad password. This capability makes the Administrator account a popular target for brute force attacks that attempt to guess passwords. The value of this countermeasure is lessened because this account has a well-known SID, and there are third-party tools that allow authentication by using the SID rather than the account name. Therefore, even if you rename the Administrator account, an attacker could launch a brute force attack by using the SID to log on.
+   "
+   impact 1.0
+   describe user("Administrator") do
+     # it { should_not exist }
+     skip "this rule skipped as no rename required"
+   end
+ end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.1.6_L1_Configure_Accounts_Rename_guest_account" do
   title "(L1) Configure 'Accounts: Rename guest account'"
@@ -1652,25 +1657,26 @@ control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.5_L1_Ensure_Network_access_
   end
 end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.6_L1_Configure_Network_access_Named_Pipes_that_can_be_accessed_anonymously" do
-#   title "(L1) Configure 'Network access: Named Pipes that can be accessed anonymously'"
-#   desc  "
-#     This policy setting determines which communication sessions, or pipes, will have attributes and permissions that allow anonymous access.
+control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.6_L1_Configure_Network_access_Named_Pipes_that_can_be_accessed_anonymously" do
+   title "(L1) Configure 'Network access: Named Pipes that can be accessed anonymously'"
+   desc  "
+     This policy setting determines which communication sessions, or pipes, will have attributes and permissions that allow anonymous access.
     
-#     The recommended state for this setting is:
+     The recommended state for this setting is:
     
-#     * **Level 1 - Domain Controller.** The recommended state for this setting is: LSARPC, NETLOGON, SAMR and (when the legacy **Computer Browser** service is enabled) BROWSER.
-#     * **Level 1 - Member Server.** The recommended state for this setting is: 
-#     <blank> (i.e. None), or (when the legacy **Computer Browser** service is enabled) BROWSER.
-#     **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Licensing** Role Service will require a special exception to this recommendation, to allow the HydraLSPipe and TermServLicensing Named Pipes to be accessed anonymously.</blank>
+     * **Level 1 - Domain Controller.** The recommended state for this setting is: LSARPC, NETLOGON, SAMR and (when the legacy **Computer Browser** service is enabled) BROWSER.
+     * **Level 1 - Member Server.** The recommended state for this setting is: 
+     <blank> (i.e. None), or (when the legacy **Computer Browser** service is enabled) BROWSER.
+     **Note:** A Member Server that holds the **Remote Desktop Services** Role with **Remote Desktop Licensing** Role Service will require a special exception to this recommendation, to allow the HydraLSPipe and TermServLicensing Named Pipes to be accessed anonymously.</blank>
     
-#     Rationale: Limiting named pipes that can be accessed anonymously will reduce the attack surface of the system.
-#   "
-#   impact 1.0
-#   describe(registry_key("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters")) do
-#     its('NullSessionPipes') { should be_empty }
-#   end
-# end
+     Rationale: Limiting named pipes that can be accessed anonymously will reduce the attack surface of the system.
+   "
+   impact 1.0
+   describe(registry_key("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters")) do
+     # its('NullSessionPipes') { should be_empty }
+     skip "this rule skipped as we do not support this"
+   end
+ end
 
 control "xccdf_org.cisecurity.benchmarks_rule_2.3.10.7_L1_Configure_Network_access_Remotely_accessible_registry_paths" do
   title "(L1) Configure 'Network access: Remotely accessible registry paths'"
@@ -2561,21 +2567,22 @@ control "xccdf_org.cisecurity.benchmarks_rule_9.3.1_L1_Ensure_Windows_Firewall_P
   end
 end
 
-#control "xccdf_org.cisecurity.benchmarks_rule_9.3.2_L1_Ensure_Windows_Firewall_Public_Inbound_connections_is_set_to_Block_default" do
-#  title "(L1) Ensure 'Windows Firewall: Public: Inbound connections' is set to 'Block (default)'"
-#  desc  "
-#    This setting determines the behavior for inbound connections that do not match an inbound firewall rule.
-#    
-#    The recommended state for this setting is: Block (default).
-#    
-#    Rationale: If the firewall allows all traffic to access the system then an attacker may be more easily able to remotely exploit a weakness in a network service.
-#  "
-#  impact 1.0
-#  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\WindowsFirewall\\PublicProfile") do
-#    it { should have_property "DefaultInboundAction" }
-#    its("DefaultInboundAction") { should cmp == 1 }
-#  end
-#end
+control "xccdf_org.cisecurity.benchmarks_rule_9.3.2_L1_Ensure_Windows_Firewall_Public_Inbound_connections_is_set_to_Block_default" do
+  title "(L1) Ensure 'Windows Firewall: Public: Inbound connections' is set to 'Block (default)'"
+  desc  "
+    This setting determines the behavior for inbound connections that do not match an inbound firewall rule.
+    
+    The recommended state for this setting is: Block (default).
+    
+    Rationale: If the firewall allows all traffic to access the system then an attacker may be more easily able to remotely exploit a weakness in a network service.
+  "
+  impact 1.0
+  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\WindowsFirewall\\PublicProfile") do
+    # it { should have_property "DefaultInboundAction" }
+    # its("DefaultInboundAction") { should cmp == 1 }
+    skip "this rule skipped due to access requirement"
+  end
+end
 
 control "xccdf_org.cisecurity.benchmarks_rule_9.3.3_L1_Ensure_Windows_Firewall_Public_Outbound_connections_is_set_to_Allow_default" do
   title "(L1) Ensure 'Windows Firewall: Public: Outbound connections' is set to 'Allow (default)'"
@@ -3261,89 +3268,95 @@ control "xccdf_org.cisecurity.benchmarks_rule_18.1.2.1_L1_Ensure_Allow_Input_Per
   end
 end
 
-# 18.2.1 (L1) Ensure LAPS AdmPwd GPO Extension / CSE is installed (MS only)
-#control '18.2.1' do
-#  impact 1.0
-#  title 'Ensure LAPS AdmPwd GPO Extension / CSE is installed (MS only)'
-#  desc 'Ensure LAPS AdmPwd GPO Extension / CSE is installed (MS only)'
-#  tag 'cis-level-1', 'cis-18.2.1'
-#  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+#18.2.1 (L1) Ensure LAPS AdmPwd GPO Extension / CSE is installed (MS only)
+control '18.2.1' do
+  impact 1.0
+  title 'Ensure LAPS AdmPwd GPO Extension / CSE is installed (MS only)'
+  desc 'Ensure LAPS AdmPwd GPO Extension / CSE is installed (MS only)'
+  tag 'cis-level-1', 'cis-18.2.1'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
 
-#  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions\{D76B9641-3288-4f75-942D-087DE603E3EA}') do
-#    it { should exist }
-#    it { should have_property_value('DllName', :type_dword, 1) }
-#  end
-#end
+  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions\{D76B9641-3288-4f75-942D-087DE603E3EA}') do
+    # it { should exist }
+    # it { should have_property_value('DllName', :type_dword, 1) }
+    skip "this rule skipped as LAPS installation not required"
+  end
+end
 # 18.2.2 (L1) Ensure 'Do not allow password expiration time longer than required by policy' is set to 'Enabled' (MS only)
-#control '18.2.2' do
-#  impact 1.0
-#  title 'Ensure Do not allow password expiration time longer than required by policy is set to Enabled (MS only)'
-#  desc 'Ensure Do not allow password expiration time longer than required by policy is set to Enabled (MS only)'
-#  tag 'cis-level-1', 'cis-18.2.2'
-#  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+control '18.2.2' do
+  impact 1.0
+  title 'Ensure Do not allow password expiration time longer than required by policy is set to Enabled (MS only)'
+  desc 'Ensure Do not allow password expiration time longer than required by policy is set to Enabled (MS only)'
+  tag 'cis-level-1', 'cis-18.2.2'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
 
-# describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
-#    it { should exist }
-#    it { should have_property_value('PwdExpirationProtectionEnabled', :type_dword, 1) }
-#  end
-#end
+ describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
+    # it { should exist }
+    # it { should have_property_value('PwdExpirationProtectionEnabled', :type_dword, 1) }
+    skip "this rule skipped as LAPS installation not required"
+  end
+end
 
 # 18.2.3 (L1) Ensure 'Enable Local Admin Password Management' is set to 'Enabled' (MS only)
-#control '18.2.3' do
-#  impact 1.0
-#  title 'Ensure Enable Local Admin Password Management is set to Enabled (MS only)'
-#  desc 'Ensure Enable Local Admin Password Management is set to Enabled (MS only)'
-# tag 'cis-level-1', 'cis-18.2.3'
-#  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+control '18.2.3' do
+  impact 1.0
+  title 'Ensure Enable Local Admin Password Management is set to Enabled (MS only)'
+  desc 'Ensure Enable Local Admin Password Management is set to Enabled (MS only)'
+ tag 'cis-level-1', 'cis-18.2.3'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
 
-#  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
-#    it { should exist }
-#    it { should have_property_value('AdmPwdEnabled', :type_dword, 1) }
-#  end
-#end
+  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
+    # it { should exist }
+    # it { should have_property_value('AdmPwdEnabled', :type_dword, 1) }
+    skip "this rule skipped as LAPS installation not required"
+  end
+end
 
 # 18.2.4 (L1) Ensure 'Password Settings: Password Complexity' is set to 'Enabled: Large letters + small letters + numbers + special characters' (MS only)
-#control '18.2.4' do
-#  impact 1.0
-#  title 'Ensure Password Settings: Password Complexity is set to Enabled: Large letters + small letters + numbers + special characters (MS only)'
-#  desc 'Ensure Password Settings: Password Complexity is set to Enabled: Large letters + small letters + numbers + special characters (MS only)'
-#  tag 'cis-level-1', 'cis-18.2.4'
-#  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+control '18.2.4' do
+  impact 1.0
+  title 'Ensure Password Settings: Password Complexity is set to Enabled: Large letters + small letters + numbers + special characters (MS only)'
+  desc 'Ensure Password Settings: Password Complexity is set to Enabled: Large letters + small letters + numbers + special characters (MS only)'
+  tag 'cis-level-1', 'cis-18.2.4'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
 
-#  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
-#    it { should exist }
-#    it { should have_property_value('PasswordComplexity', :type_dword, 1) }
-#  end
-#end
+  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
+    # it { should exist }
+    # it { should have_property_value('PasswordComplexity', :type_dword, 1) }
+    skip "this rule skipped as LAPS installation not required"
+  end
+end
 
 
 # 18.2.5 (L1) Ensure 'Password Settings: Password Length' is set to 'Enabled: 15 or more' (MS only)
-#control '18.2.5' do
-#  impact 1.0
-#  title 'Ensure Password Settings: Password Length is set to Enabled: 15 or more (MS only)'
-#  desc 'Ensure Password Settings: Password Length is set to Enabled: 15 or more (MS only)'
-#  tag 'cis-level-1', 'cis-18.2.5'
-#  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+control '18.2.5' do
+  impact 1.0
+  title 'Ensure Password Settings: Password Length is set to Enabled: 15 or more (MS only)'
+  desc 'Ensure Password Settings: Password Length is set to Enabled: 15 or more (MS only)'
+  tag 'cis-level-1', 'cis-18.2.5'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
 
-#  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
-#    it { should exist }
-#    it { should have_property_value('PasswordLength', :type_dword, 15) }
-#  end
-#end
+  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
+    # it { should exist }
+    # it { should have_property_value('PasswordLength', :type_dword, 15) }
+    skip "this rule skipped as LAPS installation not required"
+  end
+end
 
 # 18.2.6 (L1) Ensure 'Password Settings: Password Age (Days)' is set to 'Enabled: 30 or fewer' (MS only)
-#control '18.2.6' do
-#  impact 1.0
-#  title 'Ensure Password Settings: Password Age (Days) is set to Enabled: 30 or fewer (MS only)'
-#  desc 'Ensure Password Settings: Password Age (Days) is set to Enabled: 30 or fewer (MS only)'
-#  tag 'cis-level-1', 'cis-18.2.6'
-#  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
+control '18.2.6' do
+  impact 1.0
+  title 'Ensure Password Settings: Password Age (Days) is set to Enabled: 30 or fewer (MS only)'
+  desc 'Ensure Password Settings: Password Age (Days) is set to Enabled: 30 or fewer (MS only)'
+  tag 'cis-level-1', 'cis-18.2.6'
+  ref 'CIS Windows 2016 RTM (Release 1607) v1.0.0', url: 'https://www.cisecurity.org/cis-benchmarks/'
 
-#  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
-#    it { should exist }
-#    it { should have_property_value('PasswordAgeDays', :type_dword, 30) }
-#  end
-#end
+  describe registry_key('HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft Services\AdmPwd') do
+    # it { should exist }
+    # it { should have_property_value('PasswordAgeDays', :type_dword, 30) }
+    skip "this rule skipped as LAPS installation not required"
+  end
+end
 
 
 control "xccdf_org.cisecurity.benchmarks_rule_18.3.1_L1_Ensure_MSS_AutoAdminLogon_Enable_Automatic_Logon_not_recommended_is_set_to_Disabled" do
@@ -3623,29 +3636,30 @@ control "xccdf_org.cisecurity.benchmarks_rule_18.4.21.1_L1_Ensure_Minimize_the_n
   end
 end
 
-# control "xccdf_org.cisecurity.benchmarks_rule_18.6.1_L1_Ensure_Apply_UAC_restrictions_to_local_accounts_on_network_logons_is_set_to_Enabled_MS_only" do
-#   title "(L1) Ensure 'Apply UAC restrictions to local accounts on network logons' is set to 'Enabled' (MS only)"
-#   desc  "
-#     This setting controls whether local accounts can be used for remote administration via network logon (e.g., NET USE, connecting to C$, etc.). Local accounts are at high risk for credential theft when the same account and password is configured on multiple systems. Enabling this policy significantly reduces that risk.
+control "xccdf_org.cisecurity.benchmarks_rule_18.6.1_L1_Ensure_Apply_UAC_restrictions_to_local_accounts_on_network_logons_is_set_to_Enabled_MS_only" do
+   title "(L1) Ensure 'Apply UAC restrictions to local accounts on network logons' is set to 'Enabled' (MS only)"
+   desc  "
+     This setting controls whether local accounts can be used for remote administration via network logon (e.g., NET USE, connecting to C$, etc.). Local accounts are at high risk for credential theft when the same account and password is configured on multiple systems. Enabling this policy significantly reduces that risk.
     
-#     **Enabled:** Applies UAC token-filtering to local accounts on network logons. Membership in powerful group such as Administrators is disabled and powerful privileges are removed from the resulting access token. This configures the LocalAccountTokenFilterPolicy registry value to 0. This is the default behavior for Windows.
+     **Enabled:** Applies UAC token-filtering to local accounts on network logons. Membership in powerful group such as Administrators is disabled and powerful privileges are removed from the resulting access token. This configures the LocalAccountTokenFilterPolicy registry value to 0. This is the default behavior for Windows.
     
-#     **Disabled:** Allows local accounts to have full administrative rights when authenticating via network logon, by configuring the LocalAccountTokenFilterPolicy registry value to 1.
+     **Disabled:** Allows local accounts to have full administrative rights when authenticating via network logon, by configuring the LocalAccountTokenFilterPolicy registry value to 1.
     
-#     For more information about local accounts and credential theft, review the \"[Mitigating Pass-the-Hash (PtH) Attacks and Other Credential Theft Techniques](http://www.microsoft.com/en-us/download/details.aspx?id=36036)\" documents.
+     For more information about local accounts and credential theft, review the \"[Mitigating Pass-the-Hash (PtH) Attacks and Other Credential Theft Techniques](http://www.microsoft.com/en-us/download/details.aspx?id=36036)\" documents.
     
-#     For more information about LocalAccountTokenFilterPolicy, see Microsoft Knowledge Base article 951016: [Description of User Account Control and remote restrictions in Windows Vista](https://support.microsoft.com/en-us/kb/951016).
+     For more information about LocalAccountTokenFilterPolicy, see Microsoft Knowledge Base article 951016: [Description of User Account Control and remote restrictions in Windows Vista](https://support.microsoft.com/en-us/kb/951016).
     
-#     The recommended state for this setting is: Enabled.
+     The recommended state for this setting is: Enabled.
     
-#     Rationale: Local accounts are at high risk for credential theft when the same account and password is configured on multiple systems. Ensuring this policy is Enabled significantly reduces that risk.
-#   "
-#   impact 1.0
-#   describe registry_key("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
-#     it { should have_property "LocalAccountTokenFilterPolicy" }
-#     its("LocalAccountTokenFilterPolicy") { should cmp == 0 }
-#   end
-# end
+     Rationale: Local accounts are at high risk for credential theft when the same account and password is configured on multiple systems. Ensuring this policy is Enabled significantly reduces that risk.
+   "
+   impact 1.0
+   describe registry_key("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System") do
+     # it { should have_property "LocalAccountTokenFilterPolicy" }
+     # its("LocalAccountTokenFilterPolicy") { should cmp == 0 }
+     skip "this rule skipped due access requirement"
+   end
+ end
 
 control "xccdf_org.cisecurity.benchmarks_rule_18.6.2_L1_Ensure_WDigest_Authentication_is_set_to_Disabled" do
   title "(L1) Ensure 'WDigest Authentication' is set to 'Disabled'"

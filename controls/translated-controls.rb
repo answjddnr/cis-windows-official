@@ -2852,22 +2852,22 @@ control "xccdf_org.cisecurity.benchmarks_rule_17.2.6_L1_Ensure_Audit_User_Accoun
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_17.3.1_L1_Ensure_Audit_PNP_Activity_is_set_to_Success" do
-  title "(L1) Ensure 'Audit PNP Activity' is set to 'Success'"
-  desc  "
-    This policy setting allows you to audit when plug and play detects an external device.
+#control "xccdf_org.cisecurity.benchmarks_rule_17.3.1_L1_Ensure_Audit_PNP_Activity_is_set_to_Success" do
+#  title "(L1) Ensure 'Audit PNP Activity' is set to 'Success'"
+#  desc  "
+#    This policy setting allows you to audit when plug and play detects an external device.
     
-    The recommended state for this setting is: Success.
+#    The recommended state for this setting is: Success.
     
-    **Note:** A Windows 10, Server 2016 or higher OS is required to access and set this value in Group Policy.
+#    **Note:** A Windows 10, Server 2016 or higher OS is required to access and set this value in Group Policy.
     
-    Rationale: Enabling this setting will allow a user to audit events when a device is plugged into a system. This can help alert IT staff if unapproved devices are plugged in.
-  "
-  impact 1.0
-  describe audit_policy do
-    its('Plug and Play Events') { should eq 'Success' }
-  end
-end
+#    Rationale: Enabling this setting will allow a user to audit events when a device is plugged into a system. This can help alert IT staff if unapproved devices are plugged in.
+#  "
+#  impact 1.0
+#  describe audit_policy do
+#    its('Plug and Play Events') { should eq 'Success' }
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_17.3.2_L1_Ensure_Audit_Process_Creation_is_set_to_Success" do
   title "(L1) Ensure 'Audit Process Creation' is set to 'Success'"
@@ -2904,22 +2904,22 @@ control "xccdf_org.cisecurity.benchmarks_rule_17.5.1_L1_Ensure_Audit_Account_Loc
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_17.5.2_L1_Ensure_Audit_Group_Membership_is_set_to_Success" do
-  title "(L1) Ensure 'Audit Group Membership' is set to 'Success'"
-  desc  "
-    This policy allows you to audit the group membership information in the user&#x2019;s logon token. Events in this subcategory are generated on the computer on which a logon session is created. For an interactive logon, the security audit event is generated on the computer that the user logged on to. For a network logon, such as accessing a shared folder on the network, the security audit event is generated on the computer hosting the resource.
+#control "xccdf_org.cisecurity.benchmarks_rule_17.5.2_L1_Ensure_Audit_Group_Membership_is_set_to_Success" do
+#  title "(L1) Ensure 'Audit Group Membership' is set to 'Success'"
+#  desc  "
+#    This policy allows you to audit the group membership information in the user&#x2019;s logon token. Events in this subcategory are generated on the computer on which a logon session is created. For an interactive logon, the security audit event is generated on the computer that the user logged on to. For a network logon, such as accessing a shared folder on the network, the security audit event is generated on the computer hosting the resource.
     
-    The recommended state for this setting is: Success.
+#    The recommended state for this setting is: Success.
     
-    **Note:** A Windows 10, Server 2016 or higher OS is required to access and set this value in Group Policy.
+#    **Note:** A Windows 10, Server 2016 or higher OS is required to access and set this value in Group Policy.
     
-    Rationale: Auditing these events may be useful when investigating a security incident.
-  "
-  impact 1.0
-  describe audit_policy do
-    its("Group Membership") { should eq "Success" }
-  end
-end
+#    Rationale: Auditing these events may be useful when investigating a security incident.
+#  "
+#  impact 1.0
+#  describe audit_policy do
+#    its("Group Membership") { should eq "Success" }
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_17.5.3_L1_Ensure_Audit_Logoff_is_set_to_Success" do
   title "(L1) Ensure 'Audit Logoff' is set to 'Success'"
@@ -3621,21 +3621,21 @@ control '18.4.14.1' do
   end
 end
 
-control "xccdf_org.cisecurity.benchmarks_rule_18.4.21.1_L1_Ensure_Minimize_the_number_of_simultaneous_connections_to_the_Internet_or_a_Windows_Domain_is_set_to_Enabled" do
-  title "(L1) Ensure 'Minimize the number of simultaneous connections to the Internet or a Windows Domain' is set to 'Enabled'"
-  desc  "
-    This policy setting prevents computers from connecting to both a domain based network and a non-domain based network at the same time.
+#control "xccdf_org.cisecurity.benchmarks_rule_18.4.21.1_L1_Ensure_Minimize_the_number_of_simultaneous_connections_to_the_Internet_or_a_Windows_Domain_is_set_to_Enabled" do
+#  title "(L1) Ensure 'Minimize the number of simultaneous connections to the Internet or a Windows Domain' is set to 'Enabled'"
+#  desc  "
+#    This policy setting prevents computers from connecting to both a domain based network and a non-domain based network at the same time.
     
-    The recommended state for this setting is: Enabled.
+#    The recommended state for this setting is: Enabled.
     
-    Rationale: Blocking simultaneous connections can help prevent a user unknowingly allowing network traffic to flow between the Internet and the corporate network.
-  "
-  impact 1.0
-  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy") do
-    it { should have_property "fMinimizeConnections" }
-    its("fMinimizeConnections") { should cmp == 1 }
-  end
-end
+#    Rationale: Blocking simultaneous connections can help prevent a user unknowingly allowing network traffic to flow between the Internet and the corporate network.
+#  "
+#  impact 1.0
+#  describe registry_key("HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy") do
+#    it { should have_property "fMinimizeConnections" }
+#    its("fMinimizeConnections") { should cmp == 1 }
+#  end
+#end
 
 control "xccdf_org.cisecurity.benchmarks_rule_18.6.1_L1_Ensure_Apply_UAC_restrictions_to_local_accounts_on_network_logons_is_set_to_Enabled_MS_only" do
    title "(L1) Ensure 'Apply UAC restrictions to local accounts on network logons' is set to 'Enabled' (MS only)"
